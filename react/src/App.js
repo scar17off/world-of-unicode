@@ -10,6 +10,7 @@ import PlayerModel from "./Player/PlayerModel";
 export default function App() {
     const [useAscii, setUseAscii] = useState(false);
     const [terrain, setTerrain] = useState({});
+    const [players, setPlayers] = useState({});
 
     useEffect(() => {
         const handleKeyDown = (event) => {
@@ -30,8 +31,33 @@ export default function App() {
             setTerrain(data);
         });
 
+        socket.on("playerJoin", (data) => {
+            setPlayers((prevPlayers) => ({
+                ...prevPlayers,
+                [data.id]: data.position,
+            }));
+        });
+
+        socket.on("playerMove", (data) => {
+            setPlayers((prevPlayers) => ({
+                ...prevPlayers,
+                [data.id]: data.position,
+            }));
+        });
+
+        socket.on("playerLeave", (id) => {
+            setPlayers((prevPlayers) => {
+                const newPlayers = { ...prevPlayers };
+                delete newPlayers[id];
+                return newPlayers;
+            });
+        });
+
         return () => {
             socket.off("terrain");
+            socket.off("playerJoin");
+            socket.off("playerMove");
+            socket.off("playerLeave");
         };
     }, []);
 
@@ -48,6 +74,9 @@ export default function App() {
                 <pointLight position={[-10, -10, -10]} />
                 <ambientLight intensity={0.4} />
                 <LocalPlayer />
+                {Object.entries(players).map(([id, position]) => (
+                    <PlayerModel key={id} id={id} initialPosition={position} />
+                ))}
                 {Object.entries(terrain).map(([key, chunk]) => (
                     chunk.map((cube, index) => (
                         <Cube key={`${key}-${index}`} position={cube.position} />

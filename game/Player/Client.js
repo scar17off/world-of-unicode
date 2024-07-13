@@ -35,6 +35,10 @@ class Client {
          */
         this.sid = ws.id;
 
+        /**
+         * The player instance of the client.
+         * @type {Player}
+         */
         this.player = new Player();
         this.player.name = "Player " + this.id;
     }

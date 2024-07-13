@@ -44,11 +44,18 @@ io.on("connection", (socket) => {
     const client = new Client(socket);
     server.clients.push(client);
 
-    console.log(`Client ${client.name} connected`);
+    socket.broadcast.emit("playerJoin", client.player.getState());
+    console.log(`Client ${client.id} connected`);
+
+    socket.on("move", (movementData) => {
+        client.player.updatePosition(movementData);
+        socket.broadcast.emit("playerMove", { id: client.id, position: client.player.getPosition(), animation: client.player.animation });
+    });
 
     socket.on("disconnect", () => {
         server.clients = server.clients.filter(c => c.sid !== client.sid);
-        console.log(`Client ${client.name} disconnected`);
+        socket.broadcast.emit("playerLeave", client.id);
+        console.log(`Client ${client.id} disconnected`);
     });
 });
 

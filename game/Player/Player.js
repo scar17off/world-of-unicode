@@ -35,6 +35,12 @@ class Player {
          * @type {number}
          */
         this.speed = 0.2;
+
+        /**
+         * The animation of the player.
+         * @type {string}
+         */
+        this.animation = "idle";
     }
 
     /**
@@ -46,8 +52,33 @@ class Player {
             name: this.name,
             position: this.position,
             rotation: this.rotation,
-            velocity: this.velocity
+            velocity: this.velocity,
+            animation: this.animation
         };
+    }
+
+    /**
+     * Updates the player's position.
+     * @param {object} movementData - The movement data containing direction and speed.
+     */
+    updatePosition(movementData) {
+        this.position[0] += movementData.x;
+        this.position[1] += movementData.y;
+        this.position[2] += movementData.z;
+
+        if (movementData.x !== 0 || movementData.y !== 0 || movementData.z !== 0) {
+            this.animation = "walk";
+        } else {
+            this.animation = "idle";
+        }
+    }
+
+    /**
+     * Gets the player's current position.
+     * @returns {object} The player's position.
+     */
+    getPosition() {
+        return this.position;
     }
 }
 

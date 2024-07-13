@@ -2,20 +2,36 @@ import React, { useRef, useEffect, useState } from "react";
 import * as THREE from "three";
 import { useFrame } from "@react-three/fiber";
 import Cube from "../Cube";
+import { socket } from "../Network";
 
-const PlayerModel = ({ position }) => {
+const PlayerModel = ({ id, initialPosition }) => {
     const ref = useRef();
+    const [position, setPosition] = useState(initialPosition);
     const [animation, setAnimation] = useState("idle");
+    const positionRef = useRef(position);
 
     useEffect(() => {
-        if (ref.current) {
-            ref.current.position.set(position[0], position[1], position[2]);
-        }
+        positionRef.current = position;
     }, [position]);
+
+    useEffect(() => {
+        const handlePlayerMove = (data) => {
+            if (data.id === id) {
+                setPosition(data.position);
+                setAnimation(data.animation);
+            }
+        };
+
+        socket.on("playerMove", handlePlayerMove);
+
+        return () => {
+            socket.off("playerMove", handlePlayerMove);
+        };
+    }, [id]);
 
     const getAnimation = () => {
         switch (animation) {
-            case "walking":
+            case "walk":
                 return (delta) => {
                     const time = Date.now() * 0.001;
                     ref.current.children[2].rotation.x = Math.sin(time * 10) * 0.5; // Left Arm
@@ -30,7 +46,10 @@ const PlayerModel = ({ position }) => {
 
     useFrame((state, delta) => {
         if (ref.current) {
-            getAnimation()(delta);
+            ref.current.position.set(positionRef.current[0], positionRef.current[1], positionRef.current[2]);
+            if (typeof getAnimation === "function") {
+                getAnimation()(delta);
+            }
         }
     });
 

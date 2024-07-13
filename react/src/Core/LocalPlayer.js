@@ -2,6 +2,7 @@ import { useRef, useEffect } from "react";
 import * as THREE from "three";
 import { PerspectiveCamera } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
+import { socket } from "../Network";
 
 function LocalPlayer() {
     const ref = useRef();
@@ -17,55 +18,36 @@ function LocalPlayer() {
 
     useEffect(() => {
         const handleKeyDown = (event) => {
+            let movementData = { x: 0, y: 0, z: 0 };
             switch (event.key) {
                 case "w":
-                    velocity.current.z = speed;
+                    movementData.z = speed;
                     break;
                 case "s":
-                    velocity.current.z = -speed;
+                    movementData.z = -speed;
                     break;
                 case "a":
-                    velocity.current.x = -speed;
+                    movementData.x = -speed;
                     break;
                 case "d":
-                    velocity.current.x = speed;
+                    movementData.x = speed;
                     break;
                 case "q":
-                    velocity.current.y = -speed;
+                    movementData.y = -speed;
                     break;
                 case "e":
-                    velocity.current.y = speed;
+                    movementData.y = speed;
                     break;
                 default:
                     break;
             }
-        };
-
-        const handleKeyUp = (event) => {
-            switch (event.key) {
-                case "w":
-                case "s":
-                    velocity.current.z = 0;
-                    break;
-                case "a":
-                case "d":
-                    velocity.current.x = 0;
-                    break;
-                case "q":
-                case "e":
-                    velocity.current.y = 0;
-                    break;
-                default:
-                    break;
-            }
+            socket.emit("move", movementData);
         };
 
         window.addEventListener("keydown", handleKeyDown);
-        window.addEventListener("keyup", handleKeyUp);
 
         return () => {
             window.removeEventListener("keydown", handleKeyDown);
-            window.removeEventListener("keyup", handleKeyUp);
         };
     }, []);
 
