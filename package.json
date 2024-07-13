@@ -1,8 +1,34 @@
 {
-  "dependencies": {
-    "express": "^4.19.2",
-    "http": "^0.0.1-security",
-    "socket.io": "^4.7.5",
-    "socket.io-client": "^4.7.5"
-  }
+	"name": "world-of-unicode",
+	"version": "1.0.0",
+	"main": "index.js",
+	"scripts": {
+		"start": "node index.js",
+		"client": "cd react && npm run start",
+		"dev": "concurrently \"nodemon index.js\" \"npm run client\""
+	},
+	"dependencies": {
+		"cors": "^2.8.5",
+		"express": "^4.19.2",
+		"http": "^0.0.1-security",
+		"socket.io": "^4.7.5",
+		"socket.io-client": "^4.7.5"
+	},
+	"devDependencies": {
+		"concurrently": "^8.2.2"
+	},
+	"keywords": [
+		"world",
+		"of",
+		"unicode",
+		"socket",
+		"io",
+		"node",
+		"express",
+		"javascript",
+		"game",
+		"multiplayer"
+	],
+	"author": "scar17off",
+	"license": "ISC"
 }

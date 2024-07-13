@@ -1,38 +1,52 @@
-.App {
-  text-align: center;
+@import url("https://rsms.me/inter/inter.css");
+
+* {
+    box-sizing: border-box;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+html,
+body,
+#root {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+body {
+    font-family: inter;
+    font-size: 13px;
+    color: #fefefe;
+    background: black;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+@keyframes fade-in {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
 }
 
-.App-link {
-  color: #61dafb;
+canvas {
+    opacity: 0;
+    touch-action: none;
+    animation: fade-in 2s ease 0.3s forwards;
+    animation-delay: 0s;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+svg {
+    fill: #fefefe;
+}
+
+a {
+    color: white;
+}
+
+a {
+    pointer-events: all;
+    color: white;
+    text-decoration: none;
 }
