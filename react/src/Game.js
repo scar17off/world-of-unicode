@@ -1,4 +1,4 @@
-import "./App.css";
+import "./Game.css";
 import { Canvas } from "@react-three/fiber";
 import { Suspense, useEffect, useState } from "react";
 import AsciiRenderer from "./AsciiRenderer";
@@ -7,7 +7,7 @@ import LocalPlayer from "./Core/LocalPlayer";
 import { socket } from "./Network";
 import PlayerModel from "./Player/PlayerModel";
 
-export default function App() {
+export default function Game() {
     const [useAscii, setUseAscii] = useState(false);
     const [terrain, setTerrain] = useState({});
     const [players, setPlayers] = useState({});
